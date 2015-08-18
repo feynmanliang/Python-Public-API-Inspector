@@ -14,15 +14,15 @@ def genFunctions(module):
     """
     moduleDict = module.__dict__
     for name in dir(module):
-        if name.startswith('_'):
-            continue
+        if name.startswith('_'): continue # filter out private modules
         clazz = moduleDict[name]
-        if isinstance(clazz, types.TypeType):
+        if isinstance(clazz, types.TypeType): # only iterate over classes
             for (key, element) in clazz.__dict__.items():
-                if isinstance(element, types.FunctionType):
+                if isinstance(element, types.FunctionType): # only iterate over methods
+                    if element.__name__.startswith('_'): continue # fitler out private methods
                     argSpec = inspect.getargspec(element)
                     argList = argSpec.args
-                    print("{}.{}({})".format(module.__name__, name, ", ".join(argList)))
+                    print("{}.{}({})".format(module.__name__, element.__name__, ", ".join(argList)))
 
 
 def listPublicApis():
